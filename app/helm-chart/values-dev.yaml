@@ -1,0 +1,68 @@
+## Health checks
+livenessProbe:
+  httpGet:
+    path: /
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+readinessProbe:
+  httpGet:
+    path: /
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+replicaCount: 1
+image:
+  repository: <your-dev-docker-image>
+  tag: "dev"
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+  protocol: TCP
+  name: http
+containerPort: 3000
+env:
+  fromSecret:
+    - name: DEMO_PROJECT_RDS_CREDS
+      secret:
+        name: demo-project-rds-creds
+        key: password
+
+
+ingress:  
+  enabled: true
+  className: "nginx"
+  annotations: 
+    cert-manager.io/cluster-issuer: letsencrypt-issuer
+  hosts:
+    - host: hello.851725332550.realhandsonlabs.net
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - hosts: ["hello.851725332550.realhandsonlabs.net"]
+      secretName: acme-certificate
+
+clusterIssuer:
+  name: letsencrypt-issuer
+  email: example@gmail.com
+  privateKeySecretName: letsencrypt-account-key
+  region: us-east-1
+  hostedZoneID: Z0836720IIMJRIDGN3KT
+
+externalSecrets:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::851725332550:role/external-secrets-operator-role"
+  name: external-secrets-operator
+  region: us-east-1
+  secrets:
+    - name: demo-project-rds-creds
+      type: Opaque
+      data:
+        - name: password
+          providerKey: demo-project/rds-creds
+          providerProperty: password
+
+
