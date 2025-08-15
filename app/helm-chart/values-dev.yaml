@@ -36,12 +36,12 @@ ingress:
   annotations: 
     cert-manager.io/cluster-issuer: letsencrypt-issuer
   hosts:
-    - host: hello.851725332550.realhandsonlabs.net
+    - host: hello.905418147503.realhandsonlabs.net
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
-    - hosts: ["hello.851725332550.realhandsonlabs.net"]
+    - hosts: ["hello.905418147503.realhandsonlabs.net"]
       secretName: acme-certificate
 
 clusterIssuer:
@@ -49,12 +49,12 @@ clusterIssuer:
   email: example@gmail.com
   privateKeySecretName: letsencrypt-account-key
   region: us-east-1
-  hostedZoneID: Z0836720IIMJRIDGN3KT
+  hostedZoneID: Z048936929KXE927QUNLP
 
 externalSecrets:
   create: true
   annotations:
-    eks.amazonaws.com/role-arn: "arn:aws:iam::851725332550:role/external-secrets-operator-role"
+    eks.amazonaws.com/role-arn: "arn:aws:iam::905418147503:role/external-secrets-operator-role"
   name: external-secrets-operator
   region: us-east-1
   secrets:
